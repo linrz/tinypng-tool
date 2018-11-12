@@ -19,12 +19,13 @@ function help() {
 Usage
     tinypng <path>
     Example
-      tinypng resource/images
-      tinypng resource/images/logo.png
+        tinypng resource/images
+        tinypng resource/images/logo.png
     Options
-      -k --key
-      -v --version
-      -r --recursive
+        -k --key Set API key
+        -v --version Get tinypng tool version
+        -r --recursive Operate directory recursively
+        -d --dist Download tinyify images to specific directory
   `);
 };
 
@@ -40,7 +41,7 @@ function main() {
     return;
   }
     
-  if (argv.key) {
+  if (argv.key && argv.key.length) {
     fs.writeFileSync(CONFIG_PATH, argv.key, 'utf-8');
     return;
   }
@@ -95,10 +96,15 @@ function main() {
 
       if (response.statusCode === 201) {
         const { input: { size: inputSize } = {}, output: { url, size: outputSize } = {} } = body;
-        console.log(`压缩前：${getReadableSize(inputSize)}`);
-        console.log(`压缩后：${getReadableSize(outputSize)}`);
-        console.log(`减少了约${Math.round((inputSize - outputSize) / inputSize * 100) }% 的体积`);
-        request.get(url).pipe(fs.createWriteStream(image));
+        console.log(`${image} 压缩前：${getReadableSize(inputSize)}`);
+        console.log(`${image} 压缩后：${getReadableSize(outputSize)}`);
+        console.log(`${image} 减少了约${Math.round((inputSize - outputSize) / inputSize * 100) }% 的体积`);
+        const distPath = argv.d || argv.dist;
+        const isDistPathAbsolute = path.isAbsolute(distPath);
+        if (distPath && !fs.existsSync(isDistPathAbsolute ? distPath : path.resolve(__dirname, distPath))) {
+          fs.mkdirSync(isDistPathAbsolute ? distPath : path.resolve(__dirname, distPath), { recursive: true });
+        }
+        request.get(url).pipe(fs.createWriteStream(distPath ? isDistPathAbsolute ? `${distPath}/${image}` : path.resolve(__dirname, distPath, `./${image}`) : image));
       } else {
         console.error(body.error);
       }
