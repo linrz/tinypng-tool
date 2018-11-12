@@ -6,10 +6,12 @@ npm install tinypng-tools -g
 ```
 
 ## Usage
-``` shell
-tinypng --config key xxx
-tinypng ./images/test.png
-```
+```shell
+tinypng --key=your key
 
-## Roadmap
-[ ] Support dist path
+tinypng ./images/test.png
+
+tinypng ./images -r
+
+tinypng ./images/test.png --dist=./resources
+```
