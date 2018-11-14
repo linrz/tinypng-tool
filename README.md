@@ -1,4 +1,4 @@
-# Tinypng Tool
+# Tinypng Tools
 
 ![NPM downloads](https://img.shields.io/npm/dt/tinypng-tools.svg)
 ## Install
