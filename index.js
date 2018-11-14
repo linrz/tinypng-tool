@@ -100,11 +100,10 @@ function main() {
         console.log(`${image} 压缩后：${getReadableSize(outputSize)}`);
         console.log(`${image} 减少了约${Math.round((inputSize - outputSize) / inputSize * 100) }% 的体积`);
         const distPath = argv.d || argv.dist;
-        const isDistPathAbsolute = path.isAbsolute(distPath);
-        if (distPath && !fs.existsSync(isDistPathAbsolute ? distPath : path.resolve(__dirname, distPath))) {
-          fs.mkdirSync(isDistPathAbsolute ? distPath : path.resolve(__dirname, distPath), { recursive: true });
+        if (distPath && !fs.existsSync(path.isAbsolute(distPath) ? distPath : path.resolve(process.cwd(), distPath))) {
+          fs.mkdirSync(path.isAbsolute(distPath) ? distPath : path.resolve(process.cwd(), distPath), { recursive: true });
         }
-        request.get(url).pipe(fs.createWriteStream(distPath ? isDistPathAbsolute ? `${distPath}/${image}` : path.resolve(__dirname, distPath, `./${image}`) : image));
+        request.get(url).pipe(fs.createWriteStream(distPath ? path.isAbsolute(distPath) ? `${distPath}/${image}` : path.resolve(process.cwd(), distPath, image.split('/').pop()) : image));
       } else {
         console.error(body.error);
       }
