@@ -1,5 +1,6 @@
 # Tinypng Tool
 
+![NPM downloads](https://img.shields.io/npm/dt/tinypng-tools.svg)
 ## Install
 ```shell
 npm install tinypng-tools -g
@@ -19,3 +20,6 @@ tinypng ./images -r
 
 tinypng ./images/test.png --dist=./resources
 ```
+
+## License
+**tinypng-tools** © [linrz](https://github.com/linrz), Released under the [MIT](./LICENSE) License.
